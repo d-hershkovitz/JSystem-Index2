@@ -1,0 +1,12 @@
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<HTML>
+<HEAD>
+<TITLE>
+JSystem results
+</TITLE>
+</HEAD>
+<FRAMESET cols="30%,70%">tml" name="packageFrame">
+    <FRAME src="output3.html" name="testList">
+<FRAME src="summary.html" name="testFrame">
+</FRAMESET>
+</HTML>

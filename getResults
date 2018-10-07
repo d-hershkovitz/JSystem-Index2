@@ -1,0 +1,105 @@
+#!/bin/bash
+# Written By Dean Hershkovitz (21-05-2014).
+# Updated on 23-01-2017
+
+# Places all the files for index2 in the Jsystem log file.
+#
+
+
+#
+# Params
+#
+
+BASE_DIR="$(dirname "$(realpath "$0")")"
+
+dynamicContent=true
+
+# If another log folder was passed, use that instead
+if [[ $# -eq 1 ]] ;
+then
+	#LOG_DIR=$1
+	LOG_DIR="$(realpath "$1")"
+else
+	echo "Error: Jsystem 'Current' log path was not provided as argument" >> /dev/stderr
+	exit 1
+fi
+
+SED_OUTPUT_FILE=output.html
+SCRIPT_OUTPUT_FILE=output3.html
+
+OUTPUT_FILE=${BASE_DIR}/${SED_OUTPUT_FILE}
+DST=${BASE_DIR}/${SCRIPT_OUTPUT_FILE}
+INDEX2_FILE=${BASE_DIR}/index2.html
+
+
+echo "Starting Log Script"
+echo "+++++++++++++++++++"
+echo "Base Directory: ${BASE_DIR}" 
+echo "Log Directory: ${LOG_DIR}" 
+echo "";
+
+#
+# Clean Files
+# 
+rm -fr ${BASE_DIR}/outpu*.html;
+rm -fr ${BASE_DIR}/index2.html;
+
+if $dynamicContent;
+then
+	echo "";
+else 
+	#
+	#  Copy Report2.html
+	# Get all from <ul class="mktree" id="vasona_regression">
+	# To </body>
+	# 
+	echo "Copying Report2 ('${LOG_DIR}/report2.html') to '${OUTPUT_FILE}'";
+
+	#Extracing the </span><UL mktree to </body>.
+	sed -n '/<\/[Ss][pP][aA][nN]><[uU][Ll]/,/<\/BODY>/p' ${LOG_DIR}/report2.html > ${OUTPUT_FILE};
+
+	#Remove the </span> at the begining of the file.
+	sed  's/<\/[Ss][pP][aA][nN]><[uU][Ll]/<ul/g' -i ${OUTPUT_FILE};
+	echo "";
+fi
+
+#
+# Generate DST - OUTPUT3.html
+#
+echo "Generate Index2 file ${DST}";
+cat ${BASE_DIR}/up.html > $DST; 
+sed -e 's/<\/BODY>//g' ${OUTPUT_FILE} >> $DST;
+cat ${BASE_DIR}/down.html >> $DST;
+echo "";
+
+#
+# Copy Files
+#
+
+echo "Creating index2 file Using template ${BASE_DIR}/index2.html.bak at destination ${LOG_DIR}/index2.html"
+cp -f ${BASE_DIR}/index2.html.bak ${LOG_DIR}/index2.html;
+#echo "Moving index2.html";
+#mv ${BASE_DIR}/index2.html ${LOG_DIR}/index2.html;
+
+echo "Copying results.js";
+cp -f ${BASE_DIR}/results.js ${LOG_DIR}/results.js;
+
+echo "Copying testMapping.js"
+cp -f ${BASE_DIR}/testMapping.js ${LOG_DIR}/testMapping.js;
+
+echo "Copying ${BASE_DIR}/${SCRIPT_OUTPUT_FILE} to ${LOG_DIR}/${SCRIPT_OUTPUT_FILE}";
+cp -f ${BASE_DIR}/${SCRIPT_OUTPUT_FILE} ${LOG_DIR}/${SCRIPT_OUTPUT_FILE};
+
+echo "Update dynamic status to : ${dynamicContent}";
+sed "s/dynamicMode = false/dynamicMode = ${dynamicContent}/" -i ${LOG_DIR}/results.js
+
+
+echo "";
+
+#
+# Done !
+#
+echo "New Log Format Created!";
+echo "${LOG_DIR}/index2.html";
+
+rm -f ${BASE_DIR}/outpu*.html;
