@@ -14,10 +14,10 @@ function prepareTestersInformation(){
     	testersList[testersList.names[TESTER1_INDEX]]=[];
     	testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 1");
     	testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 2");
-	testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 3");    
+		testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 3");    
 
     	//Tester 2
-    	testersList[testersList.names[TESTER1_INDEX]]=[];
-    	testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 4");
-    	testersList[testersList.names[TESTER1_INDEX]].push("Test scenario 5");
+    	testersList[testersList.names[TESTER2_INDEX]]=[];
+    	testersList[testersList.names[TESTER2_INDEX]].push("Test scenario 4");
+    	testersList[testersList.names[TESTER2_INDEX]].push("Test scenario 5");
     }
